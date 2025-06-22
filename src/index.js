@@ -10,6 +10,8 @@ const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const fs = require("fs");
+const http = require("http");
+const socketIO = require("socket.io");
 
 const config = require("./config");
 const logger = require("./utils/logger");
@@ -22,11 +24,14 @@ const campaignRoutes = require("./routes/campaign.routes");
 const playerRoutes = require("./routes/player.routes");
 
 const errorHandler = require("./middleware/errorHandler");
+const SocketService = require("./services/socketService");
 
 const app = express();
 
 // Security Middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(mongoSanitize());
 app.use(xss());
 
@@ -125,7 +130,24 @@ app.get("/", (req, res) => {
   res.send("CMS API is running!");
 });
 
-const PORT = config.app.port;
-app.listen(PORT, () => {
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+const io = socketIO(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// Initialize Socket Service
+const socketService = new SocketService(io);
+
+const PORT = config.app.port || 3001;
+
+// Start server
+server.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
 });

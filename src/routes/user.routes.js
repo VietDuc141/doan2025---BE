@@ -46,5 +46,8 @@ router.put(
   checkRole("admin"),
   userController.updateUserGroup
 );
+router.get("/status/:id", auth, userController.getUserStatus);
+router.get("/online/all", auth, userController.getOnlineUsers);
+router.get("/online/count", auth, userController.countOnlineUsers);
 
 module.exports = router;

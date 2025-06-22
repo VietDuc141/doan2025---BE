@@ -259,6 +259,77 @@ const userController = {
                 message: error.message
             });
         }
+    },
+
+    // Get user online status
+    getUserStatus: async (req, res) => {
+        try {
+            const userId = req.params.id;
+            const user = await User.findById(userId).select('isOnline lastActive username');
+
+            if (!user) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'User not found'
+                });
+            }
+
+            res.json({
+                status: 'success',
+                data: {
+                    userId: user._id,
+                    username: user.username,
+                    isOnline: user.isOnline,
+                    lastActive: user.lastActive
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                message: error.message
+            });
+        }
+    },
+
+    // Get all online users
+    getOnlineUsers: async (req, res) => {
+        try {
+            const onlineUsers = await User.find({ isOnline: true })
+                .select('_id username isOnline lastActive');
+
+            res.json({
+                status: 'success',
+                data: {
+                    users: onlineUsers
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                message: error.message
+            });
+        }
+    },
+
+    // Count online users
+    countOnlineUsers: async (req, res) => {
+        try {
+            const onlineUsers = await User.countDocuments({ isOnline: true });
+
+            logger.info(`Online users count: ${onlineUsers}`);
+            res.json({
+                status: 'success',
+                data: {
+                    count: onlineUsers
+                }
+            });
+        } catch (error) {
+            logger.error('Error counting online users:', error);
+            res.status(500).json({
+                status: 'error',
+                message: error.message
+            });
+        }
     }
 };
 

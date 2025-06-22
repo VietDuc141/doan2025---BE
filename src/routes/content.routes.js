@@ -34,6 +34,20 @@ router.get(
   contentController.getAllContent
 );
 
+// Get total size of all content
+router.get(
+  "/total-size",
+  checkPermission("content:read"),
+  contentController.getTotalSize
+);
+
+// Get total size by content type
+router.get(
+  "/size-by-type",
+  checkPermission("content:read"),
+  contentController.getTotalSizeByType
+);
+
 // Get content by ID
 router.get(
   "/:id",

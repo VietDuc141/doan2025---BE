@@ -7,7 +7,32 @@ const contentController = {
   // Get all content
   getAllContent: async (req, res) => {
     try {
-      const contents = await Content.find().populate(
+      const { id, name, createdBy, type, isActive } = req.query;
+
+      // Build filter conditions
+      const filter = {};
+
+      if (id) {
+        filter._id = id;
+      }
+
+      if (name) {
+        filter.name = { $regex: name, $options: 'i' }; // case-insensitive search
+      }
+
+      if (createdBy) {
+        filter.createdBy = createdBy;
+      }
+
+      if (type) {
+        filter.type = type; // filter by content type (text, image, video)
+      }
+
+      if (isActive !== undefined) {
+        filter.isActive = isActive === 'true';
+      }
+
+      const contents = await Content.find(filter).populate(
         "createdBy",
         "username email"
       );
@@ -178,7 +203,7 @@ const contentController = {
         }
       }
 
-      await content.remove();
+      await Content.deleteOne({ _id: req.params.id });
 
       res.json({
         status: "success",
@@ -245,6 +270,100 @@ const contentController = {
       }
 
       res.sendFile(filePath);
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
+    }
+  },
+
+  // Get total size of all content
+  getTotalSize: async (req, res) => {
+    try {
+      const result = await Content.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalSize: { $sum: "$metadata.size" }
+          }
+        }
+      ]);
+
+      const totalSize = result.length > 0 ? result[0].totalSize : 0;
+
+      // Convert to MB with 2 decimal places
+      const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+
+      res.json({
+        success: true,
+        data: {
+          totalSize: totalSize, // in bytes
+          totalSizeMB: parseFloat(totalSizeMB), // in megabytes
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Error calculating total content size",
+        error: error.message
+      });
+    }
+  },
+
+  // Get total size by content type
+  getTotalSizeByType: async (req, res) => {
+    try {
+      const { type } = req.query;
+      let result;
+
+      if (type) {
+        // If type is provided, get data for specific type
+        const contents = await Content.find({ type });
+        let totalSize = 0;
+
+        contents.forEach(content => {
+          if (content.metadata && content.metadata.size) {
+            totalSize += content.metadata.size;
+          }
+        });
+
+        result = [{
+          type,
+          totalSize,
+          sizeInMB: (totalSize / (1024 * 1024)).toFixed(2),
+          count: contents.length
+        }];
+      } else {
+        // Get all unique types from database
+        const types = await Content.distinct('type');
+
+        // Get data for each type
+        result = await Promise.all(
+          types.map(async (contentType) => {
+            const contents = await Content.find({ type: contentType });
+            let totalSize = 0;
+
+            contents.forEach(content => {
+              if (content.metadata && content.metadata.size) {
+                totalSize += content.metadata.size;
+              }
+            });
+
+            return {
+              type: contentType,
+              totalSize,
+              sizeInMB: (totalSize / (1024 * 1024)).toFixed(2),
+              count: contents.length
+            };
+          })
+        );
+      }
+
+      res.json({
+        status: "success",
+        data: result
+      });
     } catch (error) {
       res.status(500).json({
         status: "error",
