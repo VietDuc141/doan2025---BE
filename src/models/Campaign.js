@@ -11,6 +11,14 @@ const campaignSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    type: {
+      type: String,
+      trim: true,
+    },
+    playOrder: {
+      type: String,
+      trim: true,
+    },
     contents: [
       {
         content: {

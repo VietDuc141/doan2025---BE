@@ -58,7 +58,7 @@ const campaignController = {
         });
       }
 
-      const { name, description, contents, schedule } = req.body;
+      const { name, description, contents, schedule, priority, type, playOrder } = req.body;
 
       const campaign = new Campaign({
         name,
@@ -75,6 +75,9 @@ const campaignController = {
           timeSlots: schedule.timeSlots,
         },
         createdBy: req.user._id,
+        priority,
+        type,
+        playOrder,
       });
 
       await campaign.save();
@@ -154,15 +157,14 @@ const campaignController = {
   // Delete campaign
   deleteCampaign: async (req, res) => {
     try {
-      const campaign = await Campaign.findById(req.params.id);
+      const campaign = await Campaign.findByIdAndDelete(req.params.id);
+
       if (!campaign) {
         return res.status(404).json({
           status: "error",
           message: "Campaign not found",
         });
       }
-
-      await campaign.remove();
 
       res.json({
         status: "success",

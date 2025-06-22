@@ -13,7 +13,6 @@ const userValidation = [
     .withMessage("Username must be at least 3 characters long"),
   body("email").isEmail().withMessage("Please enter a valid email"),
   body("role").isIn(["admin", "user"]).withMessage("Invalid role"),
-  body("groupId").optional().isMongoId().withMessage("Invalid group ID"),
 ];
 
 // Routes
@@ -23,7 +22,7 @@ router.post(
   "/",
   auth,
   checkRole("admin"),
-  userValidation,
+  // userValidation,
   userController.createUser
 );
 router.put(
