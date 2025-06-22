@@ -37,7 +37,7 @@ const auth = async (req, res, next) => {
 
     // Add user to request
     req.user = {
-      userId: user._id,
+      _id: user._id,
       role: user.role,
     };
 

@@ -59,7 +59,7 @@ const userController = {
                 });
             }
 
-            const { username, email, password, role, groupId } = req.body;
+            const { username, email, password, role, fullName } = req.body;
 
             // Check if user exists
             let user = await User.findOne({ $or: [{ email }, { username }] });
@@ -76,7 +76,7 @@ const userController = {
                 email,
                 password,
                 role,
-                groupId
+                fullName
             });
 
             await user.save();
@@ -89,7 +89,7 @@ const userController = {
                         username: user.username,
                         email: user.email,
                         role: user.role,
-                        groupId: user.groupId
+                        fullName: user.fullName
                     }
                 }
             });

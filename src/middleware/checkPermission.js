@@ -11,23 +11,23 @@ const checkPermission = (requiredPermission) => {
       }
 
       // Check if user has a group
-      if (!req.user.groupId) {
-        return res.status(403).json({
-          status: "error",
-          message: "User does not belong to any group",
-        });
-      }
+      // if (!req.user.groupId) {
+      //   return res.status(403).json({
+      //     status: "error",
+      //     message: "User does not belong to any group",
+      //   });
+      // }
 
       // Check if user's group has the required permission
-      const hasPermission =
-        req.user.groupId.permissions.includes(requiredPermission);
+      // const hasPermission =
+      //   req.user.groupId.permissions.includes(requiredPermission);
 
-      if (!hasPermission) {
-        return res.status(403).json({
-          status: "error",
-          message: `Permission denied: ${requiredPermission} is required`,
-        });
-      }
+      // if (!hasPermission) {
+      //   return res.status(403).json({
+      //     status: "error",
+      //     message: `Permission denied: ${requiredPermission} is required`,
+      //   });
+      // }
 
       next();
     } catch (error) {
