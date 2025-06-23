@@ -42,3 +42,7 @@
 {"level":"info","message":"Server is running on port 3001","service":"xibo-cms-api","timestamp":"2025-06-05 01:00:56"}
 {"level":"info","message":"Connected to MongoDB","service":"xibo-cms-api","timestamp":"2025-06-05 01:00:56"}
 {"level":"info","message":"::1 - - [04/Jun/2025:18:01:46 +0000] \"GET / HTTP/1.1\" 200 19 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\"","service":"xibo-cms-api","timestamp":"2025-06-05 01:01:46"}
+{"level":"info","message":"Server is running on port 3001","service":"xibo-cms-api","timestamp":"2025-06-10 16:07:28"}
+{"level":"info","message":"Connected to MongoDB","service":"xibo-cms-api","timestamp":"2025-06-10 16:07:28"}
+{"level":"info","message":"::1 - - [10/Jun/2025:09:07:36 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\"","service":"xibo-cms-api","timestamp":"2025-06-10 16:07:36"}
+{"level":"info","message":"::1 - - [10/Jun/2025:09:08:00 +0000] \"GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1\" 404 187 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\"","service":"xibo-cms-api","timestamp":"2025-06-10 16:08:00"}
