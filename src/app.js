@@ -64,6 +64,14 @@ app.use("/api/content", contentRoutes);
 const campaignRoutes = require("./routes/campaign.routes");
 app.use("/api/campaigns", campaignRoutes);
 
+// Plan routes
+const planRoutes = require("./routes/plan.routes");
+app.use("/api/plans", planRoutes);
+
+// Timeline routes
+const timelineRoutes = require("./routes/timeline.routes");
+app.use("/api/timelines", timelineRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
