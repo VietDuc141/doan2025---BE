@@ -11,7 +11,7 @@ const PlanSchema = new mongoose.Schema(
     sov: { type: String, required: false },
     maxPlaysPerHour: { type: Number, default: 0 },
     locationAware: { type: Boolean, default: false },
-    repeat: { type: String, default: "Không" },
+    repeat: { type: String, default: "Always" },
     priority: { type: String, default: "Trung bình" },
     criteria: { type: String, default: "" },
     layout: { type: String, default: "" },
@@ -19,6 +19,15 @@ const PlanSchema = new mongoose.Schema(
     cmsTime: { type: Boolean, default: false },
     sharedSchedule: { type: Boolean, default: false },
     directSchedule: { type: Boolean, default: false },
+    campaigns: [
+      {
+        campaign: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Campaign",
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

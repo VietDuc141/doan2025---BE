@@ -18,6 +18,21 @@ exports.getPlans = async (req, res) => {
   }
 };
 
+exports.getAllPlans = async (req, res) => {
+  try {
+    const plans = await Plan.find()
+
+    res.json({
+      status: "success",
+      data: { plans },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+},
 // Lấy chi tiết 1 Plan
 exports.getPlanById = async (req, res) => {
   try {

@@ -22,6 +22,8 @@ const groupRoutes = require("./routes/group.routes");
 const contentRoutes = require("./routes/content.routes");
 const campaignRoutes = require("./routes/campaign.routes");
 const playerRoutes = require("./routes/player.routes");
+const timelineRoutes = require("./routes/timeline.routes");
+const planRoutes = require("./routes/plan.routes");
 
 const errorHandler = require("./middleware/errorHandler");
 const SocketService = require("./services/socketService");
@@ -82,6 +84,8 @@ app.use("/api/groups", groupRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/campaigns", campaignRoutes);
 app.use("/api/players", playerRoutes);
+app.use("/api/timelines", timelineRoutes);
+app.use("/api/plans", planRoutes);
 
 // Health check endpoint
 app.get("/health", async (req, res) => {

@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const timelineController = require("../controllers/timeline.controller");
 
-// Lấy danh sách Timeline (có filter, search, phân trang)
-router.get("/", timelineController.getTimelines);
+// Lấy danh sách all Timeline
+router.get("/", timelineController.getAllTimelines);
 
 // Lấy chi tiết 1 Timeline
 router.get("/:id", timelineController.getTimelineById);

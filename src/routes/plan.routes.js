@@ -3,7 +3,7 @@ const router = express.Router();
 const planController = require("../controllers/plan.controller");
 
 // Lấy danh sách Plan (có filter, search, phân trang)
-router.get("/", planController.getPlans);
+router.get("/", planController.getAllPlans);
 
 // Lấy chi tiết 1 Plan
 router.get("/:id", planController.getPlanById);
