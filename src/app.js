@@ -8,6 +8,8 @@ const compression = require("compression");
 const path = require("path");
 const connectDB = require("./config/database");
 const SocketService = require("./services/socketService");
+const mongoose = require('mongoose');
+const scheduleService = require('./services/schedule.service');
 
 // Initialize Express app
 const app = express();
@@ -72,6 +74,27 @@ app.use("/api/plans", planRoutes);
 const timelineRoutes = require("./routes/timeline.routes");
 app.use("/api/timelines", timelineRoutes);
 
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+    console.log('Client connected');
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/plandb')
+    .then(() => {
+        console.log('Connected to MongoDB');
+        
+        // Initialize all plan schedules after DB connection
+        scheduleService.initializeAllSchedules()
+            .then(() => console.log('All plan schedules initialized'))
+            .catch(err => console.error('Error initializing schedules:', err));
+    })
+    .catch(err => console.error('MongoDB connection error:', err));
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -86,3 +109,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;
